@@ -10,9 +10,13 @@ export function PasswordForm() {
         const formData = new FormData(event.target);
         const password = formData.get("password");
 
-        if (password === 'short1') {
+        if (passwordLenghtIsLowerThan8(password)) {
             setIsPasswordShort(true);
         }
+    }
+    
+    function passwordLenghtIsLowerThan8(password) {
+        return password.length < 8;
     }
 
     return (
@@ -21,6 +25,7 @@ export function PasswordForm() {
                 <input type="text" name="password"/>
                 <button type="submit">Validar</button>
             </form>
-            {isPasswordShort ? 'La contraseña tiene menos de 8 caracteres' : null}
+            {isPasswordShort ? <span>La contraseña tiene menos de 8 caracteres</span> : null}
         </>);
+
 } 
