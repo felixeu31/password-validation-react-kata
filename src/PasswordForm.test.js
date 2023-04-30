@@ -1,12 +1,5 @@
 import { render, screen } from "@testing-library/react"
-
-function PasswordForm() {
-    return (
-    <>
-        <input type="text"/>
-        <button>Validar</button>
-    </>);
-}
+import { PasswordForm } from "./PasswordForm";
 
 describe('Password form tests', () => {
     it('Should render password input', () => {
