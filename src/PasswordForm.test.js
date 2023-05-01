@@ -27,8 +27,7 @@ describe('Password form tests', () => {
         ['short1'],
         ['1'],
         ['1234567']
-    ])
-        ('Should render invalid password when password length is lower than 8', async (password) => {
+    ])('Should render invalid password when password length is lower than 8', async (password) => {
         render(<PasswordForm />);
 
         act(() => {
@@ -43,6 +42,25 @@ describe('Password form tests', () => {
          */
         await waitFor(() => 
             screen.getByText('La contraseña tiene menos de 8 caracteres')
-        );
+        );        
+    });
+
+    it.each([
+        ['longPassword'],
+        ['longPasswordLonger'],
+        ['longPasswordLongest']
+    ])('Should render invalid password when does not contain numbers', async (password) => {
+            render(<PasswordForm />);
+
+            act(() => {
+                const passwordInput = screen.getByRole('textbox');
+                userEvent.type(passwordInput, password);
+                const validateButton = screen.getByRole('button');
+                userEvent.click(validateButton);
+            });
+
+            await waitFor(() => {
+                screen.getByText('La contraseña debe contener números');
+            });
     });
 })
