@@ -1,40 +1,45 @@
 import { useState } from "react";
 
-export function PasswordForm() {
+function validate(password) {
+    const validations = [];
 
-    const [isPasswordShort, setIsPasswordShort] = useState(false);
-    const [passwordNotContainNumbers, setPasswordNotContainNumbers] = useState(false);
+    if (passwordLenghtIsLowerThan8(password)) {
+        validations.push('La contraseña tiene menos de 8 caracteres');
+    }
 
-    function validatePassword(event) {
-        event.preventDefault();
+    if (!doesPasswordContainAnyNumber(password)) {
+        validations.push('La contraseña debe contener números');
+    }
+    return validations;
+}
 
-        const formData = new FormData(event.target);
-        const password = formData.get("password");
+function doesPasswordContainAnyNumber(password) {
+    for(const character of password){
+        const isNumber = !isNaN(Number(character));
 
-        if (passwordLenghtIsLowerThan8(password)) {
-            setIsPasswordShort(true);
-        }
-
-        if(!doesPasswordContainAnyNumber(password)){
-            setPasswordNotContainNumbers(true);
+        if (isNumber) {
+            return true;
         }
     }
     
-    function doesPasswordContainAnyNumber(password) {
-        for(const character of password){
-            const isNumber = !isNaN(Number(character));
+    return false;
+}
 
-            if (isNumber) {
-                return true;
-            }
-        }
-        
-        return false;
-    }
+function passwordLenghtIsLowerThan8(password) {
+    return password.length < 8;
+}
 
-    function passwordLenghtIsLowerThan8(password) {
-        return password.length < 8;
-    }
+export function PasswordForm() {
+
+    const [validationMessages, setValidationMessages] = useState([]);
+
+    function validatePassword(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const password = formData.get("password");
+
+        setValidationMessages(validate(password));
+    }  
 
     return (
         <>
@@ -42,8 +47,9 @@ export function PasswordForm() {
                 <input type="text" name="password"/>
                 <button type="submit">Validar</button>
             </form>
-            {isPasswordShort ? <span>La contraseña tiene menos de 8 caracteres</span> : null}
-            {passwordNotContainNumbers ? <span>La contraseña debe contener números</span> : null}        
+            <ul>
+                {validationMessages.map((message, index) => <li key={index}>{message}</li>)}    
+            </ul>
         </>);
 
 } 
