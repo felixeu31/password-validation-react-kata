@@ -79,4 +79,46 @@ describe('Password form tests', () => {
             screen.getByText('La contraseña debe contener números');
         })
     });
+
+    it.each([
+        ['validPassword1'],
+        ['validPassword2']
+    ])('Should render valid passwords', async (password) => {
+        render(<PasswordForm />);
+
+        const passwordInput = screen.getByRole('textbox');
+        const validateButton = screen.getByRole('button');
+
+        act(() => {
+            userEvent.type(passwordInput, password);
+            userEvent.click(validateButton);
+        });
+
+        await waitFor(() => {
+            screen.getByText(password);
+        });
+    });
+
+    it('Should render all valid passwords', async () => {
+        render(<PasswordForm />);
+
+        const passwordInput = screen.getByRole('textbox');
+        const validateButton = screen.getByRole('button');
+
+        act(() => {
+            userEvent.type(passwordInput, 'validPassword1');
+            userEvent.click(validateButton);
+            userEvent.clear(passwordInput);
+        });
+        
+        act(() => {
+            userEvent.type(passwordInput, 'validPassword2');
+            userEvent.click(validateButton);
+        });
+
+        await waitFor(() => {
+            screen.getByText('validPassword1');
+            screen.getByText('validPassword2');
+        });
+    });
 })
