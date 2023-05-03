@@ -1,3 +1,7 @@
+# Kata: password validation in react
+
+This kata was practiced following this video: [Password Validation Kata con React - Codurance Spain](https://www.youtube.com/watch?v=WhTlBYqT_hY&t)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
