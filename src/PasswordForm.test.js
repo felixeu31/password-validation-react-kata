@@ -121,4 +121,21 @@ describe('Password form tests', () => {
             screen.getByText('validPassword2');
         });
     });
+
+    it('should not render error message when password is valid', async () => {
+        render(<PasswordForm />);
+      
+        const passwordInput = screen.getByRole('textbox');
+        const validateButton = screen.getByRole('button');
+
+        act(() => {
+          userEvent.type(passwordInput, 'validPassword1');
+          userEvent.click(validateButton);
+        });
+      
+        await waitFor(() =>{
+            expect(screen.queryByText('La contraseña tiene menos de 8 caracteres')).toBeNull()
+            expect(screen.queryByText('La contraseña debe contener números')).toBeNull()
+        });
+      });
 })
